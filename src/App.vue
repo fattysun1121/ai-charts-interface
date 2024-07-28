@@ -22,45 +22,51 @@ use([
 
 const input = ref('')
 
-const options = ref({
-  textStyle: {
-    fontFamily: 'Inter, "Helvetica Neue"'
-  },
-  title: {
-    text: 'Weekly Sales',
-    left: 'center',
-  }, 
+const output = ref('{}')
+const options = ref(JSON.parse(output.value))
 
-  tooltip: {
-    trigger: 'item',
-    formatter: '{a} <br/> {b} : {c}'
-  },
-  xAxis: {
-    type: 'category',
-    data: ['MON', 'TUE', 'WED', 'THR', 'FRI', 'SAT', 'SUN']
-  },
-  yAxis: {
-    type: 'value',
-  },
-  legend: {
-    data: ['Sales'],
-    right: 10,
-  },
-  series: {
-    name: 'Sales',
-    data: ['30000', '40000', '50000', '10000', '5000', '7900', '4500'],
-    type: 'bar',
-    showBackGround: true,
-    backgroundStyle: {
-      color: 'rgba(180, 180, 180, 0.2)'
-    }
-  }
+// {
+//   textStyle: {
+//     fontFamily: 'Inter, "Helvetica Neue"'
+//   },
+//   title: {
+//     text: 'Weekly Sales',
+//     left: 'center',
+//   }, 
 
-})
-const output = computed(() => (input.value))
+//   tooltip: {
+//     trigger: 'item',
+//     formatter: '{a} <br/> {b} : {c}'
+//   },
+//   xAxis: {
+//     type: 'category',
+//     data: ['MON', 'TUE', 'WED', 'THR', 'FRI', 'SAT', 'SUN']
+//   },
+//   yAxis: {
+//     type: 'value',
+//   },
+//   legend: {
+//     data: ['Sales'],
+//     right: 10,
+//   },
+//   series: {
+//     name: 'Sales',
+//     data: ['30000', '40000', '50000', '10000', '5000', '7900', '4500'],
+//     type: 'bar',
+//     showBackGround: true,
+//     backgroundStyle: {
+//       color: 'rgba(180, 180, 180, 0.2)'
+//     }
+//   }
+// }
+
 
 function update(e: Event) {
   input.value = (e.target! as HTMLInputElement).value
+}
+
+function generateChart(e: Event) {
+  options.value = JSON.parse(input.value)
 }
 
 </script>
@@ -73,7 +79,15 @@ function update(e: Event) {
 
     <main>
       <div class="editor">
-        <textarea :value="input" class="input"  @input="update" placeholder="Chart input:"></textarea>
+        <div class="input-area">
+          <div class="input-buttons">
+            <button @click="input=''">Clear</button>
+            <button @click="generateChart">Generate Chart</button>
+          </div>
+          
+          <textarea :value="input" class="input"  @input="update" placeholder="Chart input:"></textarea>
+        </div>
+        
         <div class="output">
           <v-chart :option="options" autoresize/>
         </div>
@@ -84,6 +98,43 @@ function update(e: Event) {
 </template>
 
 <style scoped>
+.input-area {
+  display: flex;
+  flex-direction: column;
+}
+.input-buttons {
+  display: flex;
+  justify-content: space-around;
+  border: 1px solid #ccc;
+}
+
+button {
+  /* Remove default styling */
+  background: none;
+  color: inherit;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+
+  /* Add personal styling */
+  font-size: 1rem;
+  font-family: 'Monaco', courier, monospace;
+  background-color: rgb(102, 206, 139);
+  padding: 0.5rem 1rem 0.5rem 1rem;
+  margin: 1rem;
+  border-radius: 1.5rem;
+
+}
+button:hover {
+  filter: brightness(120%);
+}
+
+button:active {
+  box-shadow: inset 2px 2px 10px #222f28;
+}
+
 #container {
   position: absolute;
   right: 0;
@@ -97,10 +148,9 @@ function update(e: Event) {
 }
 
 .editor {
-  height: 60rem;
+  height: 40rem;
   width: 80rem;
   display: flex;
-
 }
 
 .input,
@@ -109,10 +159,10 @@ function update(e: Event) {
   height: 100%;
   box-sizing: border-box;
   padding: 20px;
+  border: 1px solid #ccc;
 }
 
 .input {
-  border: 1px solid #ccc;
   resize: none;
   outline: none;
   background-color: #f6f6f6;
@@ -122,7 +172,7 @@ function update(e: Event) {
   width: 30rem;
 }
 .output {
-  border: 1px solid #ccc;
+
   width: 50rem;
 }
 </style>
