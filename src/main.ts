@@ -2,5 +2,10 @@ import './assets/main.css'
 
 import { createApp } from 'vue'
 import App from './App.vue'
+import VueEcharts from 'vue-echarts'
 
-createApp(App).mount('#app')
+
+const app = createApp(App)
+app.component('v-chart', VueEcharts)
+app.mount('#app')
+
