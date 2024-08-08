@@ -1,29 +1,13 @@
 <script setup lang="ts">
-import { ref, computed, provide } from 'vue'
-import { use } from 'echarts/core'
-import { BarChart } from 'echarts/charts'
-import { CanvasRenderer } from 'echarts/renderers'
-import { 
-  TitleComponent,
-  GridComponent,
-  TooltipComponent,
-  LegendComponent } from 'echarts/components'
+import { ref } from 'vue'
 
 
-use([
-  BarChart,
-  TitleComponent,
-  TooltipComponent,
-  GridComponent,
-  LegendComponent,
-  CanvasRenderer
-])
+import ChartContainer from './components/ChartContainer.vue'
+
 
 
 const input = ref('')
-
-const output = ref('{}')
-const options = ref(JSON.parse(output.value))
+const option = ref(null)
 
 // {
 //   textStyle: {
@@ -66,7 +50,8 @@ function update(e: Event) {
 }
 
 function generateChart(e: Event) {
-  options.value = JSON.parse(input.value)
+  option.value = JSON.parse(input.value)
+  console.log(option)
 }
 
 </script>
@@ -89,7 +74,8 @@ function generateChart(e: Event) {
         </div>
         
         <div class="output">
-          <v-chart :option="options" autoresize/>
+          <!-- <v-chart :option="options" autoresize/> -->
+           <ChartContainer title="Hello World!" :option="option" v-if="option" chartType="bar" />
         </div>
         
       </div>
