@@ -75,7 +75,7 @@ function generateChart(e: Event) {
         
         <div class="output">
           <!-- <v-chart :option="options" autoresize/> -->
-           <ChartContainer title="Hello World!" :option="option" v-if="option" chartType="bar" />
+           <ChartContainer titleText="Hello World!" v-if="option" chartType="bar" />
         </div>
         
       </div>
