@@ -7,8 +7,23 @@ import ChartContainer from './components/ChartContainer.vue'
 
 
 const input = ref('')
-const option = ref(null)
+const option = ref(null)  // Doesn't do anything right here
 
+const data = {
+  category: ['MON', 'TUE', 'WED', 'THR', 'FRI', 'SAT', 'SUN'],
+  series: [
+    {
+      name: 'Sales1',
+      data: ['30000', '40000', '50000', '10000', '5000', '7900', '4500'],
+      type: 'bar',
+    },
+    {
+      name: 'Sales2',
+      data: ['3000', '50000', '500', '20', '5023', '73900', '700'],
+      type: 'bar',
+    }
+  ]
+}
 // {
 //   textStyle: {
 //     fontFamily: 'Inter, "Helvetica Neue"'
@@ -75,7 +90,7 @@ function generateChart(e: Event) {
         
         <div class="output">
           <!-- <v-chart :option="options" autoresize/> -->
-           <ChartContainer titleText="Hello World!" v-if="option" chartType="bar" />
+           <ChartContainer titleText="Hello World!" :data="data" v-if="option" chartType="bar" />
         </div>
         
       </div>

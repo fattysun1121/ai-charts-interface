@@ -40,10 +40,43 @@ use([
   CanvasRenderer
 ])
 
-// type EChartComponentOptions = TitleComponentOption | TooltipComponentOption | GridComponentOption | LegendComponentOption
+let option = ref({})
+type EChartsBaseOption = TitleComponentOption | TooltipComponentOption | GridComponentOption | LegendComponentOption
 switch (props.chartType) {
-  case 'bar': 
+  case 'bar':
+    interface BarData {
+      category: Array<string>;
+      series: Array<BarSeriesOption>;
+    }
     use([BarChart])
+    type BarOption = ComposeOption<EChartsBaseOption | BarSeriesOption>
+    const barData: BarData = props.data as BarData
+    const barOption: BarOption= {
+      // textStyle: {
+      //   fontFamily: 'Inter, "Helvetica Neue"'
+      // },
+      title: {
+        text: props.titleText,
+        left: 'center',
+      }, 
+        // tooltip: {
+        //   trigger: 'item',
+        //   formatter: '{a} <br/> {b} : {c}'
+        // },
+      xAxis: {
+        type: 'category',
+        data: barData.category
+      },
+      yAxis: {
+        type: 'value',
+      },
+      legend: {
+        data: barData.series.map(element => (element.name as string)),
+        right: 10,
+      },
+      series: barData.series 
+    }
+    option.value = barOption
     break
   case 'scatter':
     use([ScatterChart])
@@ -59,43 +92,6 @@ switch (props.chartType) {
     break
 }
 
-type EChartsOption = ComposeOption<
-  | TitleComponentOption
-  | TooltipComponentOption
-  | GridComponentOption
-  | LegendComponentOption
-  | BarSeriesOption
->
-
-let option: EChartsOption = {
-  textStyle: {
-    fontFamily: 'Inter, "Helvetica Neue"'
-  },
-  title: {
-    text: props.titleText,
-    left: 'center',
-  }, 
-  tooltip: {
-    trigger: 'item',
-    formatter: '{a} <br/> {b} : {c}'
-  },
-  xAxis: {
-    type: 'category',
-    data: ['MON', 'TUE', 'WED', 'THR', 'FRI', 'SAT', 'SUN']
-  },
-  yAxis: {
-    type: 'value',
-  },
-  legend: {
-    data: ['Sales'],
-    right: 10,
-  },
-  series: {
-    name: 'Sales',
-    data: ['30000', '40000', '50000', '10000', '5000', '7900', '4500'],
-    type: 'bar'
-  }
-}
 
 
 
