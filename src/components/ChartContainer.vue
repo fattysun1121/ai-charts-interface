@@ -35,6 +35,8 @@ import type {
 
 } from 'echarts/components'
 
+
+// 主題相關
 import { THEME_KEY } from 'vue-echarts'
 import { provide } from 'vue'
 import infographic from '../themes/infographic.json'
@@ -51,6 +53,7 @@ const props = defineProps<{
   data?: object
 }>()
 
+// 指定要使用的組件
 use([
   TitleComponent,
   TooltipComponent,
@@ -63,6 +66,8 @@ use([
 const option = ref({})
 
 type EChartsBaseOption = TitleComponentOption | TooltipComponentOption | GridComponentOption | LegendComponentOption
+
+// 決定要渲染的圖形，以及製作要提供渲染模組的option
 switch (props.chartType) {
   case 'bar':
     use([BarChart])
@@ -79,10 +84,6 @@ switch (props.chartType) {
       title: {
         text: barData.titleText,
         left: 'center',
-      }, 
-      tooltip: {
-        show: true,
-        formatter: '{a}: <br/> {b} {c}$'
       },
       xAxis: {
         type: 'category',
@@ -123,18 +124,13 @@ switch (props.chartType) {
     
     type ScatterOption = ComposeOption<EChartsBaseOption | ScatterSeriesOption>
     const scatterData: ScatterData = props.data as ScatterData
+    console.log(scatterData.series)
     const scatterOption: ScatterOption = {
       title: {
         text: scatterData.titleText,
         left: 'center',
       }, 
-      tooltip: {
-        show: true,
-        formatter: '{a}: <br/> {b} {c}$'
-      },
       xAxis: {
-        type: 'category',
-        data: scatterData.category,
         name: scatterData.xName,
         nameLocation: 'middle',
         nameGap: 30,
@@ -143,17 +139,15 @@ switch (props.chartType) {
         }
       },
       yAxis: {
-        type: 'value',
         name: scatterData.yName,
         nameLocation: 'middle',
         nameGap: 60,
         nameTextStyle: {
           fontWeight: 'bold'
         }
-      
       },
       legend: {
-        data: scatterData.series.map(element => (element.name as string)),
+        data: scatterData.series.map(seriesOption => (seriesOption.name as string)),
         right: 10,
       },
       series: scatterData.series 
