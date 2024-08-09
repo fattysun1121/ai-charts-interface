@@ -21,12 +21,18 @@ import {
 } from 'echarts/components'
 import { CanvasRenderer } from 'echarts/renderers'
 import type { ComposeOption } from 'echarts/core'
-import type { BarSeriesOption } from 'echarts'
+import type { 
+  BarSeriesOption,
+  ScatterSeriesOption, 
+  PieSeriesOption, 
+  LineSeriesOption 
+} from 'echarts'
 import type {
   TitleComponentOption,
   TooltipComponentOption,
   GridComponentOption,
-  LegendComponentOption
+  LegendComponentOption,
+
 } from 'echarts/components'
 
 import { THEME_KEY } from 'vue-echarts'
@@ -36,7 +42,7 @@ import infographic from '../themes/infographic.json'
 const selected = ref('')
 registerTheme('infographic', infographic)
 // composition API
-// provide(THEME_KEY, selected)
+provide(THEME_KEY, selected)
 
 
 const props = defineProps<{
@@ -46,7 +52,6 @@ const props = defineProps<{
 }>()
 
 use([
-  BarChart,
   TitleComponent,
   TooltipComponent,
   GridComponent,
@@ -54,86 +59,143 @@ use([
   CanvasRenderer
 ])
 
-let option = ref({
-  "textStyle": {
-    "fontFamily": "Inter, 'Helvetica Neue'"
-  },
-  "title": {
-    "text": "Weekly Sales",
-    "left": "center"
-  }, 
 
-  "tooltip": {
-    "trigger": "item",
-    "formatter": "{a} <br/> {b} : {c}"
-  },
-  "xAxis": {
-    "type": "category",
-    "data": ["MON", "TUE", "WED", "THR", "FRI", "SAT", "SUN"]
-  },
-  "yAxis": {
-    "type": "value"
-  },
-  "legend": {
-    "data": ["Sales"],
-    "right": 10
-  },
-  "series": {
-    "name": "Sales",
-    "data": ["30000", "40000", "50000", "10000", "5000", "7900", "4500"],
-    "type": "bar",
-    "showBackGround": true,
-    "backgroundStyle": {
-      "color": "rgba(180, 180, 180, 0.2)"
+const option = ref({})
+
+type EChartsBaseOption = TitleComponentOption | TooltipComponentOption | GridComponentOption | LegendComponentOption
+switch (props.chartType) {
+  case 'bar':
+    use([BarChart])
+    interface BarData {
+      titleText: string;
+      category: Array<string>;
+      yName: string;
+      xName: string; 
+      series: Array<BarSeriesOption>;
     }
-  }
+    type BarOption = ComposeOption<EChartsBaseOption | BarSeriesOption>
+    const barData: BarData = props.data as BarData
+    const barOption: BarOption = {
+      title: {
+        text: barData.titleText,
+        left: 'center',
+      }, 
+      tooltip: {
+        show: true,
+        formatter: '{a}: <br/> {b} {c}$'
+      },
+      xAxis: {
+        type: 'category',
+        data: barData.category,
+        name: barData.xName,
+        nameLocation: 'middle',
+        nameGap: 30,
+        nameTextStyle: {
+          fontWeight: 'bold'
+        }
+      },
+      yAxis: {
+        type: 'value',
+        name: barData.yName,
+        nameLocation: 'middle',
+        nameGap: 60,
+        nameTextStyle: {
+          fontWeight: 'bold'
+        }
+      
+      },
+      legend: {
+        data: barData.series.map(element => (element.name as string)),
+        right: 10,
+      },
+      series: barData.series 
+    }
+    option.value = barOption
+    break
+  case 'scatter':
+    use([ScatterChart])
+    interface ScatterData {
+      titleText: string;
+      xName: string;
+      yName: string;
+      series: Array<ScatterSeriesOption>;
+    }
+    
+    type ScatterOption = ComposeOption<EChartsBaseOption | ScatterSeriesOption>
+    const scatterData: ScatterData = props.data as ScatterData
+    const scatterOption: ScatterOption = {
+      title: {
+        text: scatterData.titleText,
+        left: 'center',
+      }, 
+      tooltip: {
+        show: true,
+        formatter: '{a}: <br/> {b} {c}$'
+      },
+      xAxis: {
+        type: 'category',
+        data: scatterData.category,
+        name: scatterData.xName,
+        nameLocation: 'middle',
+        nameGap: 30,
+        nameTextStyle: {
+          fontWeight: 'bold'
+        }
+      },
+      yAxis: {
+        type: 'value',
+        name: scatterData.yName,
+        nameLocation: 'middle',
+        nameGap: 60,
+        nameTextStyle: {
+          fontWeight: 'bold'
+        }
+      
+      },
+      legend: {
+        data: scatterData.series.map(element => (element.name as string)),
+        right: 10,
+      },
+      series: scatterData.series 
+    }
+
+    option.value = scatterOption
+    break
+  case 'pie':
+    use([PieChart])
+    interface PieData {
+      category: Array<string>;
+      series: Array<PieSeriesOption>;
+    }
+    
+    type PieOption = ComposeOption<EChartsBaseOption | PieSeriesOption>
+    const pieData: PieData = props.data as PieData
+    const pieOption: PieOption = {
+
+    }
+
+    option.value = pieOption
+    break
+  case 'line':
+    use([LineChart])
+    interface LineData {
+      category: Array<string>;
+      series: Array<LineSeriesOption>;
+    }
+    
+    type LineOption = ComposeOption<EChartsBaseOption | LineSeriesOption>
+    const lineData: LineData = props.data as LineData
+    const lineOption: LineOption = {
+
+    }
+
+    option.value = lineOption
+    break 
+
+  default:
+    console.log("Chart type not supported!")
+    break
 }
-)
-
-
-// type EChartsBaseOption = TitleComponentOption | TooltipComponentOption | GridComponentOption | LegendComponentOption
-// switch (props.chartType) {
-//   case 'bar':
-//     interface BarData {
-//       category: Array<string>;
-//       series: Array<BarSeriesOption>;
-//     }
-//     use([BarChart])
-//     type BarOption = ComposeOption<EChartsBaseOption | BarSeriesOption>
-//     const barData: BarData = props.data as BarData
-//     const barOption: BarOption= {
-//       title: {
-//         text: props.titleText,
-//         left: 'center',
-//       }, 
-//       xAxis: {
-//         type: 'category',
-//         data: barData.category
-//       },
-//       yAxis: {
-//         type: 'value',
-//       },
-//       legend: {
-//         data: barData.series.map(element => (element.name as string)),
-//         right: 10,
-//       },
-//       series: barData.series 
-//     }
-//     option.value = barOption
-//     break
-//   case 'scatter':
-//     use([ScatterChart])
-//     break
-//   case 'pie':
-//     use([PieChart])
-//     break
-//   case 'line':
-//     use([LineChart])
-//     break 
-//   default:
-//     console.log("Chart type not supported!")
-//     break
-// }
 
 </script>
 

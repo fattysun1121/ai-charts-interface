@@ -5,11 +5,11 @@ import { ref } from 'vue'
 import ChartContainer from './components/ChartContainer.vue'
 
 
-
 const input = ref('')
 const option = ref(null)  // Doesn't do anything right here
 
 const data = {
+  titleText: 'Hello World!',
   category: ['MON', 'TUE', 'WED', 'THR', 'FRI', 'SAT', 'SUN'],
   series: [
     {
@@ -22,7 +22,13 @@ const data = {
       data: ['3000', '50000', '500', '20', '5023', '73900', '700'],
       type: 'bar',
     }
-  ]
+  ],
+  xName: 'Weekday',
+  yName: 'USD'
+}
+
+const scatterData = {
+
 }
 
 function update(e: Event) {
@@ -55,7 +61,7 @@ function generateChart(e: Event) {
         
         <div class="output">
           <!-- <v-chart :option="options" autoresize/> -->
-           <ChartContainer titleText="Hello World!" :data="data" v-if="option" chartType="bar" />
+           <ChartContainer titleText="Hello World!" :data="data" chartType="bar" />
         </div>
         
       </div>
