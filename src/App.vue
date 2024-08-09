@@ -24,41 +24,6 @@ const data = {
     }
   ]
 }
-// {
-//   textStyle: {
-//     fontFamily: 'Inter, "Helvetica Neue"'
-//   },
-//   title: {
-//     text: 'Weekly Sales',
-//     left: 'center',
-//   }, 
-
-//   tooltip: {
-//     trigger: 'item',
-//     formatter: '{a} <br/> {b} : {c}'
-//   },
-//   xAxis: {
-//     type: 'category',
-//     data: ['MON', 'TUE', 'WED', 'THR', 'FRI', 'SAT', 'SUN']
-//   },
-//   yAxis: {
-//     type: 'value',
-//   },
-//   legend: {
-//     data: ['Sales'],
-//     right: 10,
-//   },
-//   series: {
-//     name: 'Sales',
-//     data: ['30000', '40000', '50000', '10000', '5000', '7900', '4500'],
-//     type: 'bar',
-//     showBackGround: true,
-//     backgroundStyle: {
-//       color: 'rgba(180, 180, 180, 0.2)'
-//     }
-//   }
-// }
-
 
 function update(e: Event) {
   input.value = (e.target! as HTMLInputElement).value
@@ -173,7 +138,6 @@ button:active {
   width: 30rem;
 }
 .output {
-
   width: 50rem;
 }
 </style>
