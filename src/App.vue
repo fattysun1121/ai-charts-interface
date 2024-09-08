@@ -77,7 +77,7 @@ function generateChart(e: Event) {
 <template>
   <div id="container">
     <header>
-      <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
+      <h1>圖形界面 Chart Interface</h1>
     </header>
 
     <main>
@@ -93,7 +93,7 @@ function generateChart(e: Event) {
         
         <div class="output">
           <!-- <v-chart :option="options" autoresize/> -->
-           <ChartContainer :data="scatterData" chartType="scatter" />
+           <ChartContainer :data="data" chartType="scatter" />
         </div>
         
       </div>
@@ -102,6 +102,12 @@ function generateChart(e: Event) {
 </template>
 
 <style scoped>
+header {
+  margin: 2rem;
+}
+h1 {
+  font-weight: bolder;
+}
 .input-area {
   display: flex;
   flex-direction: column;
@@ -148,7 +154,8 @@ button:active {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: aliceblue;
+  background-color: white;
+  align-self: center;
 }
 
 .editor {
